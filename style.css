@@ -1,0 +1,21 @@
+td, th {
+    border: solid 1px black;
+}
+
+#bookList {
+    border-collapse: collapse;
+}
+
+form li {
+    margin-top: 1em;
+}
+
+ul > li {
+    list-style-type: none;
+}
+
+label {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+}
