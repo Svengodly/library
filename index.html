@@ -17,11 +17,12 @@
         </tr>
     </table>
     <dialog id="dialogBox">
-        <form method="dialog">
+    <!-- The submit event is fired on the form element, not the form controls. -->
+        <form>
             <ul>
                 <li>
                     <label for="title">Title:</label>
-                    <input type="text" id="title">
+                    <input type="text" id="title" autofocus>
                 </li>
                 <li>
                     <label for="author">Author:</label>
@@ -32,12 +33,12 @@
                     <input type="number" id="pages">
                 </li>
                 <li>
-                    <label id="read">Have you read this book?</label>
+                    <label for="read">Have you read this book?</label>
                     <input type="checkbox" id="read">
                 </li>
                 <li>
-                    <button id="closeDialog">Close</button>
-                    <button>Submit</button>
+                    <button formmethod="dialog" id="closeButton">Close</button>
+                    <button formmethod="dialog" id="submit">Submit</button>
                 </li>
             </ul>
         </form>

@@ -1,17 +1,6 @@
 // Create array to store books
 
-const myLibrary = [{
-    title: "My Book",
-    author: "Rick",
-    pages: 200,
-    read: true,
-},
-{
-    title: "Game of Thrones",
-    author: "Martin",
-    pages: 400,
-    read: false,
-}];
+const myLibrary = [];
 
 // Create Book Constructor
 
@@ -21,6 +10,23 @@ function Book(title, author, pages, read) {
     this.pages = pages;
     this.read = read;
 }
+
+// Create a couple of books to place into myLibrary
+
+const dummyBook = new Book("Battle Cry of Freedom", "James McPherson", 862, true);
+const dummyBook2 = new Book("The 48 Laws of Power", "Robert Greene", 430, false);
+
+// We could declare methods in the constructor, but making them on the prototype increases efficiency. All objects that prototypically inherit from Book share this function
+// which results in less memory usage.
+
+Book.prototype.sayTitle = function() {
+    console.log(`The name of this book is '${this.title}'`);
+};
+
+// Make the two objects in myLibrary inherit from Book by using Object.create()
+
+myLibrary.push(dummyBook);
+myLibrary.push(dummyBook2);
 
 // Create function that allows user to add books to library
 
@@ -37,6 +43,9 @@ function displayLibrary(library){
         const newRow = document.createElement("tr");
         // Traverse over each of the properties of a book and retreive their values.
         for (let property in book) {
+            if (property == "sayTitle") {
+                continue;
+            }
             // Create cell that will contain a properties' value.
             const propValue = document.createElement("td");
             propValue.innerText = book[property];
@@ -45,13 +54,13 @@ function displayLibrary(library){
         }
         // Finally, add the entire row that contains all of the book's information to the table.
         books.appendChild(newRow);
-    }   
+    }
 }
 
 // Select the table element.
 const books = document.getElementById("bookList");
 
-// Add way to display modal window.
+// Add a way to display modal window.
 const dialog = document.getElementById("dialogBox");
 
 // Add event listner to Add Book button.
@@ -60,9 +69,22 @@ addBookButton.addEventListener("click", () => {
     dialog.showModal();
 })
 
-// Button to close dialog.
-const closeDialogButton = document.getElementById("closeDialog");
-closeDialogButton.addEventListener("click", () => {
+// The submit button needs to retreive all of the values of the input fields of the form and use them to create a new Book object.
+// The values of the input elements can be retreived by selecting the individual input elements by id through the HTMLInputElementAPI (document.getElementById('title') for example)
+
+// Erase the input fields upon submission of form.
+const diagForm = document.querySelector("form");
+
+diagForm.addEventListener("submit", (e) => {
+    diagForm.reset();
+})
+
+// Add a way to close dialog box
+const closeButton = document.getElementById("closeButton");
+closeButton.addEventListener("click", (e) => {
+    e.preventDefault();
     dialog.close();
 })
+
+// Invoke displayLibrary to draw out table of books.
 displayLibrary(myLibrary);
