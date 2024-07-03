@@ -2,7 +2,7 @@ td, th {
     border: solid 1px black;
 }
 
-#bookList {
+table {
     border-collapse: collapse;
 }
 

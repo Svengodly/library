@@ -44,8 +44,6 @@ closeButton.addEventListener("click", (e) => {
     dialog.close();
 })
 
-// The submit button needs to retreive all of the values of the input fields of the form and use them to create a new Book object.
-// The values of the input elements can be retreived by selecting the individual input elements by id through the HTMLInputElementAPI (document.getElementById('title') for example)
 
 const diagForm = document.querySelector("form");
 
@@ -54,6 +52,9 @@ const diagForm = document.querySelector("form");
 myLibrary.push(dummyBook);
 myLibrary.push(dummyBook2);
 myLibrary.push(dummyBook3);
+
+// The submit button needs to retreive all of the values of the input fields of the form and use them to create a new Book object.
+// The values of the input elements can be retreived by selecting the individual input elements by id through the HTMLInputElementAPI (document.getElementById('title') for example)
 
 diagForm.addEventListener("submit", (e) => {
     // Also, need to check the state of the checkbox. If it's checked, the value is 'Yes.'
@@ -70,13 +71,14 @@ function displayLibrary(library){
     for (let book of library) {
         // Begin row for new entry.
         const newRow = document.createElement("tr");
-        // Traverse over each of the properties of a book and retreive their values.
+        // Traverse over each of the properties of a book and retrieve their values.
         for (let property in book) {
             if (property == "changeRead") {
                 continue;
             }
             // Create cell that will contain a properties' value.
             const propValue = document.createElement("td");
+            propValue.setAttribute("class", property);
             propValue.innerText = book[property];
             // Add cell to the row as a child of the 'tr' element.
             newRow.appendChild(propValue);
@@ -107,9 +109,9 @@ function createToggleButton(book) {
     const bookButton = document.createElement("button");
     bookButton.setAttribute("type", "button");
     bookButton.setAttribute("class", "toggleButton");
-    // Add click event listener to all deleteButtons. Write code that will remove object from myLibrary. Also need to delete row from the DOM tree and update indices.
+    // Add click event listener that toggles the read status.
     bookButton.addEventListener("click", () => {
-        bookButton.parentNode.childNodes[3].innerText = book.changeRead();
+        bookButton.parentNode.querySelector('.read').innerText = book.changeRead();
     })
     bookButton.innerText = "Toggle";
     return bookButton;
@@ -134,11 +136,14 @@ function addBookToLibrary(formData){
         }
         // Create cell that will contain a properties' value.
         const propValue = document.createElement("td");
+        // Set class 'td' to that of the name of the property.
+        propValue.setAttribute("class", property);
         propValue.innerText = newBook[property];
         // Add cell to the row as a child of the 'tr' element.
         newRow.appendChild(propValue);
     }
     newRow.appendChild(createDeleteButton(newBook));
+    newRow.appendChild(createToggleButton(newBook));
     // Finally, add the entire row that contains all of the book's information to the table.
     books.appendChild(newRow);
     // console.log(newBook);
