@@ -15,7 +15,6 @@ function Book(title, author, pages, read) {
 // which results in less memory usage.
 
 Book.prototype.changeRead = function() {
-    console.log(`Is '${this.title}' completed? '${this.read}'.`);
     // If the read property of the book is "Yes," set it to "No" and vice-versa.
     return this.read = this.read == "Yes" ? "No" : "Yes";
 };
@@ -79,12 +78,18 @@ function displayLibrary(library){
             // Create cell that will contain a properties' value.
             const propValue = document.createElement("td");
             propValue.setAttribute("class", property);
-            propValue.innerText = book[property];
+            if (property != 'read'){
+                propValue.innerText = book[property];
+            }
+            if (property == 'title') {
+                propValue.appendChild(createDeleteButton(book));
+            }
+            if (property == 'read') {
+                propValue.appendChild(createToggleButton(book));
+            }
             // Add cell to the row as a child of the 'tr' element.
             newRow.appendChild(propValue);
         }
-        newRow.appendChild(createDeleteButton(book));
-        newRow.appendChild(createToggleButton(book));
         // Finally, add the entire row that contains all of the book's information to the table.
         books.appendChild(newRow);
     }
@@ -99,7 +104,7 @@ function createDeleteButton(book) {
     // Add click event listener to all deleteButtons. Write code that will remove object from myLibrary. Also need to delete row from the DOM tree and update indices.
     bookButton.addEventListener("click", () => {
         myLibrary.splice(`${myLibrary.indexOf(book)}`, 1);
-        bookButton.parentElement.remove();
+        bookButton.parentElement.parentElement.remove();
     })
     bookButton.innerText = "Delete";
     return bookButton;
@@ -111,9 +116,9 @@ function createToggleButton(book) {
     bookButton.setAttribute("class", "toggleButton");
     // Add click event listener that toggles the read status.
     bookButton.addEventListener("click", () => {
-        bookButton.parentNode.querySelector('.read').innerText = book.changeRead();
+        bookButton.innerText = book.changeRead();
     })
-    bookButton.innerText = "Toggle";
+    bookButton.innerText = book.read;
     return bookButton;
 }
 
@@ -121,7 +126,7 @@ function createToggleButton(book) {
 
 function addBookToLibrary(formData){
     // Takes information from form to build a new Book, then adds that to myLibrary array.
-    // Delaring a variable to store an array of values for each input. Converting from a NodeList to an Array to gain access to map method.
+    // Declaring a variable to store an array of values for each input. Converting from a NodeList to an Array to gain access to map method.
 
     let inputValues = Array.from(formData).map((input) => input.value);
     // Pass array elements in inputValues one by one using the spread operator (...).
@@ -138,15 +143,21 @@ function addBookToLibrary(formData){
         const propValue = document.createElement("td");
         // Set class 'td' to that of the name of the property.
         propValue.setAttribute("class", property);
-        propValue.innerText = newBook[property];
+        if (property != 'read'){
+            propValue.innerText = newBook[property];
+        }
+        if (property == 'title') {
+            propValue.appendChild(createDeleteButton(newBook));
+        }
+        if (property == 'read') {
+            propValue.appendChild(createToggleButton(newBook));
+        }
         // Add cell to the row as a child of the 'tr' element.
         newRow.appendChild(propValue);
     }
-    newRow.appendChild(createDeleteButton(newBook));
-    newRow.appendChild(createToggleButton(newBook));
+    // newRow.appendChild(createToggleButton(newBook));
     // Finally, add the entire row that contains all of the book's information to the table.
     books.appendChild(newRow);
-    // console.log(newBook);
 }
 
 // Invoke displayLibrary to draw out table of books.
