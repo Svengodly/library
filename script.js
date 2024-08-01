@@ -2,7 +2,7 @@
 
 const myLibrary = [];
 
-// Create Book Constructor
+// Create Book Constructor - Need to change this to a class for the lib-classes branch.
 
 function Book(title, author, pages, read) {
     this.title = title;
