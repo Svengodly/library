@@ -3,23 +3,26 @@
 const myLibrary = [];
 
 // Create Book Constructor - Need to change this to a class for the lib-classes branch.
+// Also need to try adding accessory properties, or getters and setters.
 
-function Book(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-}
+class Book {
+    constructor(title, author, pages, read) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.read = read;
+    }
 
-// We could declare methods in the constructor, but making them on the prototype increases efficiency. All objects that prototypically inherit from Book share this function
-// which results in less memory usage.
+    get bookInfo() {
+        return [`${this.title}`, `${this.author}`, `${this.pages}`, `${this.read}`];
+    }
 
-Book.prototype.changeRead = function() {
-    // If the read property of the book is "Yes," set it to "No" and vice-versa.
-    return this.read = this.read == "Yes" ? "No" : "Yes";
+    changeRead() {
+        return this.read = this.read == "Yes" ? "No" : "Yes";
+    }
 };
 
-// Create a couple of books to place into myLibrary
+// Create a few books to place into myLibrary
 
 const dummyBook = new Book("Battle Cry of Freedom", "James McPherson", 862, "No");
 const dummyBook2 = new Book("The 48 Laws of Power", "Robert Greene", 430, "No");
@@ -71,15 +74,14 @@ function displayLibrary(library){
         // Begin row for new entry.
         const newRow = document.createElement("tr");
         // Traverse over each of the properties of a book and retrieve their values.
-        for (let property in book) {
-            if (property == "changeRead") {
-                continue;
-            }
+        for (let [index, detail] of book.bookInfo.entries()) {
+            // Obtain list of properties. Use index to retrieve property name.
+            let property = Object.getOwnPropertyNames(book)[index];
             // Create cell that will contain a properties' value.
             const propValue = document.createElement("td");
             propValue.setAttribute("class", property);
             if (property != 'read'){
-                propValue.innerText = book[property];
+                propValue.innerText = detail;
             }
             if (property == 'title') {
                 propValue.appendChild(createDeleteButton(book));
@@ -90,6 +92,10 @@ function displayLibrary(library){
             // Add cell to the row as a child of the 'tr' element.
             newRow.appendChild(propValue);
         }
+        console.log(newRow.childNodes.forEach((node) => {
+
+        }));
+
         // Finally, add the entire row that contains all of the book's information to the table.
         books.appendChild(newRow);
     }
